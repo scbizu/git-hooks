@@ -1,0 +1,11 @@
+#!/bin/sh
+# gist: https://gist.github.com/scbizu/09a6675f360c2b7f6a4799140879ae84
+# Post-commit hook to squash commits if there are more than 10 commits after master
+COMMITS_AFTER_MASTER=$(git rev-list --count master..HEAD)
+DEFAULT_MAX_COMMITS=10
+
+if [ $COMMITS_AFTER_MASTER -gt $DEFAULT_MAX_COMMITS ]; then
+	echo "You have $COMMITS_AFTER_MASTER commits after master, performing rebase squash"
+	git rebase -i HEAD~$COMMITS_AFTER_MASTER
+	exit 1
+fi
